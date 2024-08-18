@@ -21,7 +21,7 @@ const JiraBoard: React.FC = () => {
         return tasks.filter((task) => task.id !== id);
     }
 
-    function handleDataUpdate(sourceColumn: string, targetColumn: string, task: TaskProps, mode = "edit") {
+    function handleDataUpdate(sourceColumn: string, targetColumn: string, task: TaskProps, mode = "edit", isDrag: boolean = false) {
         if (targetColumn !== sourceColumn) {
             switch (targetColumn) {
                 case "New":
@@ -51,6 +51,20 @@ const JiraBoard: React.FC = () => {
                         break;
                 }
             }
+        } else if(targetColumn === sourceColumn && !isDrag) {
+            switch (targetColumn) {
+                case "New":
+                    setNewTicket((prevTasks)=> prevTasks.map((taskdata)=> taskdata.id == task.id ? {...taskdata,...task}: taskdata))
+                    break;
+                case "InProgress":
+                    setInProgress((prevTasks)=> prevTasks.map((taskdata)=> taskdata.id == task.id ? {...taskdata,...task}: taskdata));
+                    break;
+                case "Completed":
+                    setCompleted((prevTasks)=> prevTasks.map((taskdata)=> taskdata.id == task.id ? {...taskdata,...task}: taskdata));
+                    break;
+                default:
+                    break;
+
         }
     }
 
@@ -66,7 +80,7 @@ const JiraBoard: React.FC = () => {
         const taskData = e.dataTransfer.getData("task");
         const task = JSON.parse(taskData);
         const sourceColumn = e.dataTransfer.getData("sourceColumn");
-        await handleDataUpdate(sourceColumn, targetColumn, task)
+        await handleDataUpdate(sourceColumn, targetColumn, task, 'edit', true)
     };
 
     const onSubmit = async (data: FormDataProps, mode = 'add') => {

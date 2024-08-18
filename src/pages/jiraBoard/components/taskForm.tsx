@@ -43,6 +43,7 @@ const TaskForm: React.FC<TaskFormProps> = ({task, category = "New", onSubmitHand
 
     // const [form] = Form.useForm();
     const onFinish = (values: any) => {
+        const formDataWithEdit = {...values, id: task?.id}
         onSubmitHandler(values)
     };
 
