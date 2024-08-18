@@ -65,6 +65,7 @@ const JiraBoard: React.FC = () => {
                 default:
                     break;
 
+            }
         }
     }
 
